@@ -1,0 +1,13 @@
+#Ask the user for their age and the significant other's age
+userAge = int(input("Enter your age: "))
+loverAge = int(input("Enter your significant other's age: "))
+
+#Calculates the age range the user is allowed to date
+youngest = userAge/2 + 7
+oldest = (userAge - youngest)  * 3 + youngest
+
+#Determine if the significant other fits into the user's age range
+if (youngest <= loverAge <= oldest):
+    print("Go for it! It's socially acceptable!")
+else:
+    print("Don't even try. It's creepy")
