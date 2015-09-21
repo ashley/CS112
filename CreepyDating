@@ -1,3 +1,5 @@
+#Program Goal: program that provides guidance on whether a particular person on whether or not they should date a specific other person of a certain age
+
 #Ask the user for their age and the significant other's age
 userAge = int(input("Enter your age: "))
 loverAge = int(input("Enter your significant other's age: "))
@@ -11,3 +13,16 @@ if (youngest <= loverAge <= oldest):
     print("Go for it! It's socially acceptable!")
 else:
     print("Don't even try. It's creepy")
+
+#Test A: Input 18, 23. Output creepy
+#Test B: Input 18, 15. Output creepy
+#Test C: Input 30, 47. Output creepy
+#Test D: Input 30, 21. Output creepy
+#Test E: Input 18, 21. Output good
+#Test F: Input 18, 17. Output good
+#Test G: Input 30, 45. Output good
+#Test H: Input 30, 23. Output good
+#Test I: Input 18, 22. Output good
+#Test J: Input 18, 16. Output good
+#Test K: Input 30, 46. Output good
+#Test L: Input 30, 22. Output good
