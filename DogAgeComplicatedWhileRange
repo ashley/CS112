@@ -56,7 +56,6 @@ print("You've tried this program ", counter, " times. The average of your dogs' 
 
 #Code written by Ashley Chen
 
-
 """
 INPUTS and predicted OUTPUTS
 19, 1  15
