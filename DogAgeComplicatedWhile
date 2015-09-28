@@ -17,9 +17,9 @@ while bool ==1:
         else:
             dogRealAge = 21 + (dogAge - 2)*4
     elif dogAge == 2:
-        dogRealAge = 21*dogAge
+        dogRealAge = 21
     else:
-        dogRealAge = 15 + 6*(dogAge-1)
+        dogRealAge = 15
 
     print(dogName, "'s dog age is ", dogRealAge, " lbs.")
     decision = input("Would you like to use the program again? (type Yes or no)")
