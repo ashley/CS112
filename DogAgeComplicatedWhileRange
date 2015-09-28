@@ -1,5 +1,3 @@
-#Code written by Ashley Chen
-
 """
 Program Goal:  Your clients have several dogs. Given each dogs’ age and weight,
 report (print) that dog’s age in calendar years. Finally report the average age (in dog’s years)
@@ -55,6 +53,8 @@ while bool ==1:
                      bool = 0
 #Ends the program with a count and an average                     
 print("You've tried this program ", counter, " times. The average of your dogs' ages is ", total/counter, "lbs.")        
+
+#Code written by Ashley Chen
 
 
 """
