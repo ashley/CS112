@@ -42,7 +42,7 @@ while bool ==1:
     print(dogName, "'s dog age is ", dogRealAge, " lbs.")
 
     #Gives the user a choice to calculate the age of another dog
-    decision = input("Would you like to use the program again? (type Yes or no)")
+    decision = input("Would you like to use the program again? (type Yes or No)")
     finalDecision = decision.lower()
     if finalDecision == "yes":
                      bool = 1
