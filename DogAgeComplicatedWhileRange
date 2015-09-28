@@ -1,4 +1,5 @@
 """
+Code written by Ashley Chen
 Program Goal:  Your clients have several dogs. Given each dogs’ age and weight,
 report (print) that dog’s age in calendar years. Finally report the average age (in dog’s years)
 of all your dogs.
