@@ -1,0 +1,66 @@
+import random
+
+#Display game introduction
+print("This is a number guessing game. The computer will generate a number between 1 and 10. You will guess the number to win.")
+
+#Ask how many players
+numPlayers = int(input("How many players are in this game: "))
+
+#Generate random number secretly between 1-10
+number = random.randrange(1,11)
+guess = 0
+guessOne = 0
+guessTwo = 0
+win = 0
+counter = 0
+playerOneScore = 0
+playerTwoScore = 0
+fullGameWin = 0
+
+#If one player (ask name)
+if numPlayers == 1:
+    playerOneName = input("What is your name: ")
+#Let the player guess until the answer is correct
+    while guess != number:
+        guess = int(input("Enter your guess: "))
+        if guess == number:
+            print("Congratulations,", playerOneName, "! You have guessed the correct number!")
+        else:
+            print("Try again")
+
+#If two players (ask name)
+elif numPlayers == 2:
+    fullGame = input("Would you like to play two out of three games? (Enter Y or N): ")
+    print(number)
+    playerOneName = input("Enter player 1's name: ")
+    playerTwoName = input("Enter player 2's name: ")
+
+if fullGame == "Y":
+    while playerOneScore <= 2 or playerTwoScore <= 2:
+        win = 0
+        print("Score: ", playerOneName, "- ", playerOneScore, "  ", playerTwoName, "-", playerTwoScore)
+        while win == 0:
+            if counter == 10:
+                print("Opps! You and ", playerTwoName, "Both of you have guessed more than ten times. You must have guessed the same number more than once. Sorry, this means you should go back to school.")
+                win = 1
+            else:
+                guessOne = int(input(playerOneName + ", please enter your guess: "))
+                if guessOne == number:
+                    print("Congratulations" , playerOneName, "You have guessed the correct number!")
+                    win = 1
+                    playerOneScore += 1
+                else:
+                    print("Nope, ", playerOneName, ", you've guessed the wrong number.")
+                    counter += 1
+                    guessTwo = int(input(playerTwoName +  ", please enter your guess: "))
+                    if guessTwo == number:
+                        print("Congratulations" , playerTwoName, "You have guessed the correct number!")
+                        win = 1
+                        playerTwoScore += 1
+                    else:
+                        counter += 1
+                        print("Sorry ", playerTwoName, "now it's ", playerOneName, "'s turn.")
+    if playerOneScore < playerTwoScore:
+        print("Congratulations ", playerOneName, "! You've won!")
+    else:
+        print("Congratulations ", playerOneName, "! You've won!")
