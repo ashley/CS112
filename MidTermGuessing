@@ -54,7 +54,7 @@ if multiplayer == "Y":
                elif playGuess < number:
                     print("Incorrect, " + turn + ".You and " + otherTurn + " have " + str(9 - counter) + " more tries. Guess lower next time. Now, it's " + otherTurn + "'s turn.")
                     counter += 1
-elif multiplayer == "N":
+elif multiplayer == "N": #Single Player
     while gameContinue == 'Y':
         codeForOnePlayersButUnlimitedGames =  1
         number = random.randrange(1,11)
@@ -62,6 +62,8 @@ elif multiplayer == "N":
         print(number)
         counter = 0 #reset counter
         oneGuess = 0 #reset guess, just in case the next random number in the same as the previous random number
+        string = " "
+        previousString = " "
 
         while oneGuess != number and counter < 10:
             oneGuess = int(input("Enter your guess: "))
@@ -72,6 +74,8 @@ elif multiplayer == "N":
                 gameContinue = input("Opps," + oneName + "You have used up all of your tries. How hard is it to guess a number between 1 and 10 when you have ten tries. Play again? (Enter 'Y' for yes and 'N' for no)")
             elif oneGuess < number:
                 #print(counter)
+                print("You have guessed: " + previousString)
+                previousString += str(oneGuess) + ", "
                 print("Incorrect, " + oneName + ".You have " + str(9 - counter) + " more tries. Guess higher..")
                 counter += 1
             elif oneGuess > number:
