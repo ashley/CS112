@@ -11,14 +11,18 @@ Notes to self
 number = random.randrange(1,11)
 oneName = 0
 twoName = 0
+oneScore = 0
+twoScore = 0
 gameContinue = 'Y'
-oneGuess = 0
-twoGuess = 0
 counter = 0
 guess = 0
 turn = oneName
 playGuess = 0
 otherTurn = twoName
+previousString = " "
+highLow = " "
+high = "Guess higher"
+low = "Guess lower"
 
 
 #Prompt Intro
@@ -28,60 +32,59 @@ multiplayer = input("Hi " + oneName + ". Would you like to play with someone els
 if multiplayer == "Y":
     twoName = input("Enter player 2's name: ")
     fancyGame = input("Hi " + oneName + " and " + twoName + ". Would you like to play two out of three games? (Enter 'Y' for yes and 'N' for no)")
-    if fancyGame == "Y":
-        while gameContinue == 'Y':
-            codeForTwoPlayersButLimitedGames =  1
-    elif fancyGame == "N": #Code for Two Players But Unlimited Games
-        while gameContinue == 'Y':
-           number = random.randrange(1,11)
-           print("Begin!")
-           print(number)
-           counter = 0 #reset counter
-           oneGuess = 0 #reset guess, just in case the next random number in the same as the previous random number
+while gameContinue == 'Y':
+    number = random.randrange(1,11)
+    print("Begin!")
+    print(number)
+    counter = 0 #reset counter
+    guess = 0 #reset guess, just in case the next random number in the same as the previous random number
+    previousString = " "
+    while guess != number and counter < 10:
+        if multiplayer == "Y": #multiplayer
+            if(10 - counter) % 2 == 0:
+                turn = oneName
+                otherTurn = twoName
+            else:
+                turn = twoName
+                otherTurn = oneName
+        else:
+            turn = oneName
+        guess = int(input("Enter your guess: "))
 
-           while guess !=number and counter < 10:
-               if (10 - counter)%2 == 0:
-                   turn = oneName
-                   otherTurn = twoName
-               else:
-                   turn = twoName
-                   otherTurn = oneName
-               playGuess = int(input(turn +  ", Enter your guess: "))
-               guess = playGuess
-               if playGuess == number:
-                   gameContinue = input("Congratulations, " + turn + "! You have guessed the correct number!. Would you like to play again? (Enter 'Y' for yes and 'N' for no)")
-                   counter = 10
-               elif playGuess < number:
-                    print("Incorrect, " + turn + ".You and " + otherTurn + " have " + str(9 - counter) + " more tries. Guess lower next time. Now, it's " + otherTurn + "'s turn.")
-                    counter += 1
-elif multiplayer == "N": #Single Player
-    while gameContinue == 'Y':
-        codeForOnePlayersButUnlimitedGames =  1
-        number = random.randrange(1,11)
-        print("Begin!")
-        print(number)
-        counter = 0 #reset counter
-        oneGuess = 0 #reset guess, just in case the next random number in the same as the previous random number
-        string = " "
-        previousString = " "
-
-        while oneGuess != number and counter < 10:
-            oneGuess = int(input("Enter your guess: "))
-            if oneGuess == number:
-                counter = 10
-                print("Congratulations, " + oneName + "! You have guessed the correct number!")
-            elif oneGuess == number and counter == 10:
-                gameContinue = input("Opps," + oneName + "You have used up all of your tries. How hard is it to guess a number between 1 and 10 when you have ten tries. Play again? (Enter 'Y' for yes and 'N' for no)")
-            elif oneGuess < number:
-                #print(counter)
-                print("You have guessed: " + previousString)
-                previousString += str(oneGuess) + ", "
-                print("Incorrect, " + oneName + ".You have " + str(9 - counter) + " more tries. Guess higher..")
-                counter += 1
-            elif oneGuess > number:
-                #print(counter)
-                print("Incorrect, " + oneName + ".You have " + str(9 - counter) + " more tries. Guess lower..")
-                counter += 1
-        gameContinue = input("Would you like to play again? (Enter 'Y' for yes and 'N' for no)")
-
-
+        if guess == number:
+            counter = 10
+            print("Congratulations, " + turn + "! You have guessed the correct number!")
+            if fancyGame == "Y":
+              if turn == oneName:
+                oneScore += 1
+              else:
+                twoScore += 1
+              if oneScore == 2 and twoScore == 1:
+                turn = oneName
+              elif oneScore == 3 and twoScore == 2:
+                turn = oneName
+              elif twoScore == 2 and oneScore == 1:
+                turn = twoName
+              elif twoScore == 3 and oneScore == 2:
+                turn = oneName   
+              print("The current score: " + oneName + "- " + str(oneScore) + "  " + twoName + "- " + str(twoScore))  
+        elif counter == 9:
+            if multiplayer == "Y":
+                gameContinue = input("Opps, Both of you have used up all of your tries. How hard is it to guess a number between 1 and 10 when you have ten tries. Play again? (Enter 'Y' for yes and 'N' for no)")
+            else:
+                gameContinue = input("Opps," + turn + "You have used up all of your tries. How hard is it to guess a number between 1 and 10 when you have ten tries. Play again? (Enter 'Y' for yes and 'N' for no)")
+        elif guess !=number:
+            if guess < number:
+                highLow = high
+            else:
+                highLow = low
+            if multiplayer == "Y":
+                print("Incorrect, " + turn + ".You and " + otherTurn + " have " + str(9 - counter) + " more tries. " + highLow + " next time. Now, it's " + otherTurn + "'s turn.")
+                print("Here are the numbers which both of you have already guessed: " + previousString) #Extra credit code
+            else:
+                print("Incorrect, " + turn + ".You have " + str(9 - counter) + " more tries. " + highLow + " next time.")
+                print("Here are the numbers which both of you have already guessed: " + previousString) #Extra credit code
+            previousString += str(guess) + ", " #Extra credit code pt. 2
+            counter += 1
+    gameContinue = input("Would you like to play again? (Enter 'Y' for yes and 'N' for no)")
+print("Goodbye!")
