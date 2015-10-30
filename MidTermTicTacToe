@@ -3,45 +3,79 @@
 #Function which creates a black 3x3 board
 def create():
     board = [["*","*","*"],["*","*","*"],["*","*","*"]]
+    board[0][0] = "_|"
+    board[0][1] = "_"
+    board[0][2] = "|_"
+    board[1][0] = "_|"
+    board[1][1] = "_"
+    board[1][2] = "|_"
+    board[2][0] = " "
+    board[2][1] = "|   |"
+    board[2][2] = " "
     display(board)
     inGame = True
-    player = 0
-    return board, inGame,player
+    playerTotal = [0, 0]
+    counter = 0
+    return board, inGame, playerTotal, counter
 
 #Function to display board in a formatted way
 def display(board):
-    print(board[0])
-    print(board[1])
-    print(board[2])
+    print(board[0][0], board[0][1], board[0][2])
+    print(board[1][0], board[1][1], board[1][2])
+    print(board[2][0], board[2][1], board[2][2])
+    #print(board[2])
 
 #Function for single player (X or O)
-def move(game, playerTotal):
-    symbol = "X"
+def move(game, playerTotal, symbolOne, symbolTwo, counter):
+    if counter%2 == 0:
+	    symbolSign = symbolOne
+	    i = 0
+    else:
+        symbolSign = symbolTwo
+        i = 1
+
 
     magicSquare = [[8,1,6],[3,5,7],[4,9,2]]
     
     row = int(input("Enter the row number: ")) - 1
     column = int(input("Enter the column number: ")) - 1
-    game[row][column] = symbol
-    playerTotal += magicSquare[row-1][column-1]
+    game[row][column] = symbolSign
+    playerTotal[i] += magicSquare[row][column]
     display(game)
-    return game, playerTotal
+    counter += 1
+    print("playerTotal: ", playerTotal)
+    return game, playerTotal, counter
 
 #Function to check if a row has been made
 def check(total, gameStatus):
-    if total == 15:
-        print("You've won")
-        gameStatus = False
+	#15, 18, 30
+    print(total[0]%15)
+    print(total[1]%15)
+    if total[0] > 0 and total[1] > 0:
+        if total[0]%15 == 0 or total[1]%15 == 0:
+            print("You've won")
+            gameStatus = False
     return gameStatus
+
+def twoPlayer():
+	symbolOne = input("Player One: Enter either X or O: ")
+
+	if symbolOne == "O":
+		symbolTwo = "X"
+	else:
+		symbolTwo = "O"
+	return symbolOne, symbolTwo
 
 def main():
     #board = create()
     continueGame = "y"
     while continueGame == "y":
-    	board,inGame, player = create()
+    	board,inGame, playerTotal, counter = create()
+    	symbolOne,symbolTwo = twoPlayer()
     	while inGame == True:
-	        board,player = move(board, player)
-	        inGame = check(player,inGame)
+	        print(counter)
+	        board,player,counter = move(board, playerTotal, symbolOne, symbolTwo, counter)
+	        inGame = check(playerTotal,inGame)
 	
     	continueGame = input("conintue? ")
 main()
