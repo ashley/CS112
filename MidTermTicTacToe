@@ -1,0 +1,48 @@
+#Introduce game
+
+#Function which creates a black 3x3 board
+def create():
+    board = [["*","*","*"],["*","*","*"],["*","*","*"]]
+    display(board)
+    inGame = True
+    player = 0
+    return board, inGame,player
+
+#Function to display board in a formatted way
+def display(board):
+    print(board[0])
+    print(board[1])
+    print(board[2])
+
+#Function for single player (X or O)
+def move(game, playerTotal):
+    symbol = "X"
+
+    magicSquare = [[8,1,6],[3,5,7],[4,9,2]]
+    
+    row = int(input("Enter the row number: ")) - 1
+    column = int(input("Enter the column number: ")) - 1
+    game[row][column] = symbol
+    playerTotal += magicSquare[row-1][column-1]
+    display(game)
+    return game, playerTotal
+
+#Function to check if a row has been made
+def check(total, gameStatus):
+    if total == 15:
+        print("You've won")
+        gameStatus = False
+    return gameStatus
+
+def main():
+    #board = create()
+    continueGame = "y"
+    while continueGame == "y":
+    	board,inGame, player = create()
+    	while inGame == True:
+	        board,player = move(board, player)
+	        inGame = check(player,inGame)
+	
+    	continueGame = input("conintue? ")
+main()
+    
