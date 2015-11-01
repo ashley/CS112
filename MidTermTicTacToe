@@ -34,27 +34,49 @@ def move(game, playerTotal, symbolOne, symbolTwo, counter):
         symbolSign = symbolTwo
         i = 1
 
+    moveOn = 0
 
-    magicSquare = [[8,1,6],[3,5,7],[4,9,2]]
+    #magicSquare = [[8,1,6],[3,5,7],[4,9,2]]
     
-    row = int(input("Enter the row number: ")) - 1
-    column = int(input("Enter the column number: ")) - 1
-    game[row][column] = symbolSign
-    playerTotal[i] += magicSquare[row][column]
-    display(game)
+    while moveOn == 0:
+	    row = int(input("Enter the row number: ")) - 1
+	    column = int(input("Enter the column number: ")) - 1
+	    #print(game[0][0])
+	    if game[row][column] != "X" and game[row][column] != "O":
+	    	game[row][column] = symbolSign
+	    	#playerTotal[i] += magicSquare[row][column]
+	    	display(game)
+	    	moveOn = 1
+	    else:
+	    	print("This cell is already taken. Choose another one.")
     counter += 1
     print("playerTotal: ", playerTotal)
-    return game, playerTotal, counter
+    return game, playerTotal, counter, symbolSign
 
 #Function to check if a row has been made
-def check(total, gameStatus):
-	#15, 18, 30
-    print(total[0]%15)
-    print(total[1]%15)
-    if total[0] > 0 and total[1] > 0:
-        if total[0]%15 == 0 or total[1]%15 == 0:
+def check(counter, board, gameStatus, symbolSign):
+    #15, 18, 30 
+    symbol = symbolSign
+    #print(board, symbol)
+    print(symbol)
+    winner = False
+    i = 0
+    for a in range(3):
+	    while i != 3:
+	    	if board[a][i] == symbol:
+	    		winner = True
+	    		#print(True)
+	    		i += 1
+	    	else:
+	    		winner = False
+	    		#print(False)
+	    		i = 3
+    if winner == True:
             print("You've won")
             gameStatus = False
+    elif counter == 9:
+    		print("It's a tie")
+    		gameStatus = False
     return gameStatus
 
 def twoPlayer():
@@ -67,6 +89,7 @@ def twoPlayer():
 	return symbolOne, symbolTwo
 
 def main():
+    print("Hi")
     #board = create()
     continueGame = "y"
     while continueGame == "y":
@@ -74,8 +97,8 @@ def main():
     	symbolOne,symbolTwo = twoPlayer()
     	while inGame == True:
 	        print(counter)
-	        board,player,counter = move(board, playerTotal, symbolOne, symbolTwo, counter)
-	        inGame = check(playerTotal,inGame)
+	        board,player,counter, symbolSign = move(board, playerTotal, symbolOne, symbolTwo, counter)
+	        inGame = check(counter, board,inGame, symbolSign)
 	
     	continueGame = input("conintue? ")
 main()
