@@ -18,9 +18,9 @@ def tutorial():
     board[1][0] = "_|"
     board[1][1] = "_"
     board[1][2] = "|_"
-    board[2][0] = " "
-    board[2][1] = "|    |"
-    board[2][2] = " "
+    board[2][0] = "  |"
+    board[2][1] = "  "
+    board[2][2] = "|  "
     print("\n" + "This is what the board looks like...")
     time.sleep(1)
     display(board)
@@ -80,9 +80,9 @@ def create(playerOneName, playerTwoName):
     board[1][0] = "_|"
     board[1][1] = "_"
     board[1][2] = "|_"
-    board[2][0] = " "
-    board[2][1] = "|   |"
-    board[2][2] = " "
+    board[2][0] = "  |"
+    board[2][1] = "  "
+    board[2][2] = "|  "
     display(board) 
     inGame = True #Whether to stay within game loop
     counter = 0 #To decide ties
@@ -233,4 +233,3 @@ def main():
     print("GoodBye!")
 
 main()
-
