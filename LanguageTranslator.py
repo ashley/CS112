@@ -33,11 +33,12 @@ morseAlphabet ={
     }
 
 file = open('banana.txt')
-words = list(file.readlines()[0].upper())
+words = (file.readlines()[0])
 file.close()
+#print(words)
 
-for i in range(len(words)):
-    words[i] = morseAlphabet[words[i]]
-print(''.join(words))
+print(''.join(morseAlphabet[i] for i in words.upper()))
+
+
 
 
