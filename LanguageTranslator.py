@@ -32,12 +32,12 @@ morseAlphabet ={
     "'" : "'"
     }
 
-file = open('banana.txt')
-words = (file.readlines()[0])
+file = open('banana.txt') #Opens the file
+words = (file.readlines()[0]) #Puts the joke onto a str called words
 file.close()
 #print(words)
 
-print(''.join(morseAlphabet[i] for i in words.upper()))
+print(''.join(morseAlphabet[i] for i in words.upper())) #coverts each word to uppercase then to morse, join, print
 
 
 
