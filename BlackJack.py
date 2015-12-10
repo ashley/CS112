@@ -56,7 +56,11 @@ def blackJackValue(hand):
         #print(hand)
         cardValues = [11,2,3,4,5,6,7,8,9,10,10,10,10]
         for i in range(len(hand)):
-                        total += cardValues[hand[i]//4 - 1]
+                        value = hand[i]//4 - 1
+                        if total <= 10 and value == 0:
+                                total += 11
+                        else:
+                                total += cardValues[value]
         return total
 
 def checkValue(total, keepPlay):
@@ -83,16 +87,20 @@ def choice(name, hand, total,deck):
                 print("------------------------------------")
                 total = displayHand(hand,name)
                 play = 'o'
-                while play != 'h' and play != 'n':
-                        play = input(name + ", Hit or nah? (type 'h' for hit and 'n' for nah): ")
-                        if play == "h":
-                                total = hit(hand,total,deck)
-                                keepPlay,total = checkValue(total,keepPlay)
-                        elif play == 'n':
-                                keepPlay,total = checkValue(total,keepPlay)
-                                keepPlay = False
-                        else:
-                                print("Please type 'h' for hit and 'n' for nah")
+                if total == 21:
+                        print("Black Jack!")
+                        keepPlay = False
+                else:
+                        while play != 'h' and play != 'n':
+                                play = input(name + ", Hit or nah? (type 'h' for hit and 'n' for nah): ")
+                                if play == "h":
+                                        total = hit(hand,total,deck)
+                                        keepPlay,total = checkValue(total,keepPlay)
+                                elif play == 'n':
+                                        keepPlay,total = checkValue(total,keepPlay)
+                                        keepPlay = False
+                                else:
+                                        print("Please type 'h' for hit and 'n' for nah")
         return total
 
 def winner(total, name1, name2):
@@ -104,15 +112,13 @@ def winner(total, name1, name2):
                 print("It's a tie!")
 gameStatus = 'y'
 total = [0,0]
+play1Name = playName(str(1))
+play2Name = playName(str(2))
+print("\n")
+deck = createDeck()
 while gameStatus == 'y':
-        play1Name = playName(str(1))
-        play2Name = playName(str(2))
-        print("\n")
-        deck = createDeck()
         hand1, deck = dealAHand(deck)
         hand2, deck = dealAHand(deck)        
-        total[0] = displayHand(hand1,play1Name)
-        total[1] = displayHand(hand2,play2Name)        
         total[0] = choice(play1Name,hand1,total[0],deck)
         total[1] = choice(play2Name,hand2,total[1],deck)
         print("\n")
