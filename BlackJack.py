@@ -1,68 +1,68 @@
 import random
 
-#Introduction to game with tutorial
+#Template for a player
+class Player:
+        def __init__(self):
+                self.name = playName() #player's name, uses playerName function
+                self.total = 0 #Handvalue
 
-def playName(number):
-        name = input("Player " + number + "'s name: ")
+        #Deals a hand for the player
+        def dealAHand(self,deck):
+                random.shuffle(deck)
+                #print(deck)
+                hand = [deck[-1], deck[-2]]
+                deck.pop()
+                deck.pop()
+                #print("hand: " + str(hand) + "  . " + str(deck))
+                self.hand = hand
+                return deck #The deck leftover
+
+#Template for each card
+class Card:
+        def __init__(self,cc):
+                self.cardCode = cc #Card number
+                cardValues = [1,2,3,4,5,6,7,8,9,10,10,10,10]
+                self.bjValue = cardValues[self.cardCode//4 - 1] #Black jack value
+                
+        def __str__(self):
+                #print("hand: " + str(card))
+                suits = ["♤","♢","♡","♧"]
+                cardValues = ["Ace","2","3","4","5","6","7","8","9","10","J","Q","K"]
+                return str(cardValues[self.cardCode//4 - 1] + " of " + suits[self.cardCode%4]) #Prints out the card
+
+#Introduction to game with tutorial
+def intro():
+        print("This is the game of Black Jack. This is for two players. You will both receive two cards from a deck. The first player will choose whether or not to hit (ick another card) or stay. 21 is the highest number." + "\n")
+
+#Function to ask for player's name
+def playName():
+        name = input("Enter Player's name: ")
         return name
 
 #function to create a deck
 def createDeck():
         deck = []
-        for i in range(52):
-                deck.append(i)
-        #print(deck)
+        for i in range(4,56):
+                deck.append(Card(i))    
         return deck
 
-#function to deal a hand
-def dealAHand(deck):
-        random.shuffle(deck)
-        #print(deck)
-        hand = [deck[-1], deck[-2]]
-        deck.pop()
-        deck.pop()
-        #print("hand: " + str(hand) + "  . " + str(deck))
-        return hand,deck
-
-#function calculate a hand
-def handValue(card):
-        #print("hand: " + str(card))
-        suits = ["♤","♢","♡","♧"]
-        cardValues = ["Ace","2","3","4","5","6","7","8","9","10","J","Q","K"]
-        card = str(cardValues[card//4 - 1] + " of " + suits[card%4])
-        return card
-
-#function calculate codevalue
-def getCardCodeNumber(card):
-    card = (card.split(' '))
-    val = card[0]
-    suit = card[2]
-    cardSuits= {"♠":0,"♢":1,"♡":2,"♧":3}
-    cardValues = {"ace":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,
-                   "8":8,"9":9,"10":10,"J":11,"Q":12,"K":13}
-    cardCode = cardValues[val]*4 + cardSuits[suit] 
-    #print(cardCode)
-    return (cardCode)
-
-def displayHand(hand, name):
-        hand0 = [handValue(hand[0]), handValue(hand[1])]
-        total = blackJackValue(hand)
-        print(name + ", you have: " + ', '.join(hand0) + ". A total of " + str(total))  
-        #cardState = getCardCodeNumber(hand)
-        return total
-
+#Calculate blackJack total
 def blackJackValue(hand):
         total = 0
-        #print(hand)
-        cardValues = [11,2,3,4,5,6,7,8,9,10,10,10,10]
         for i in range(len(hand)):
-                        value = hand[i]//4 - 1
-                        if total <= 10 and value == 0:
+                        if total <= 10 and hand[i].bjValue == 0: #Determines if an ace is worth 11 or 1
                                 total += 11
                         else:
-                                total += cardValues[value]
+                                total += hand[i].bjValue
         return total
 
+#Displays all of the cards from a hand
+def displayHand(hand, name):
+        total = blackJackValue(hand)
+        print(name + ", you have: " + ', ' + str(hand[0])+ str(hand[1]) + ". A total of " + str(total))
+        return total
+
+#Checks if the total is over 21
 def checkValue(total, keepPlay):
         if total > 21:
                 print("Bust!")
@@ -73,14 +73,15 @@ def checkValue(total, keepPlay):
                 keepPlay = False
         return keepPlay,total
 
+#Function when player decides to hit
 def hit(hand,total, deck):
         hand.append(deck[-1])
-        print("It's a " + str(handValue(deck[-1])))
         deck.pop()
         total = blackJackValue(hand)
-        print(total)
+        print("It's a " + str(hand[-1]) + ". A total of " + str(total))
         return total
 
+#Each player's turn
 def choice(name, hand, total,deck):
         keepPlay = True
         while keepPlay == True:
@@ -103,25 +104,32 @@ def choice(name, hand, total,deck):
                                         print("Please type 'h' for hit and 'n' for nah")
         return total
 
-def winner(total, name1, name2):
-        if total[0] < total[1]:
+#Determines a winner based on total
+def winner(total1,total2, name1, name2):
+        if total1 < total2:
                 print("Congrats, " + name2 + "! You won!")
-        elif total[0] > total[1]:
+        elif total1 > total2:
                 print("Congrats, " + name1 + "! You won!")
-        elif total[0] == total[1]:
+        elif total1 == total2:
                 print("It's a tie!")
-gameStatus = 'y'
-total = [0,0]
-play1Name = playName(str(1))
-play2Name = playName(str(2))
-print("\n")
-deck = createDeck()
-while gameStatus == 'y':
-        hand1, deck = dealAHand(deck)
-        hand2, deck = dealAHand(deck)        
-        total[0] = choice(play1Name,hand1,total[0],deck)
-        total[1] = choice(play2Name,hand2,total[1],deck)
-        print("\n")
-        winner(total,play1Name,play2Name)
-        gameStatus = input("Play again? (type 'y' for yes or 'n' for no)")
+
         
+def main():
+        gameStatus = 'y' #turns on a game
+        intro() 
+        play1 = Player() #Creates players
+        play2 = Player()
+        print("\n")
+        deck = createDeck() #Creates a full deck
+
+        while gameStatus == 'y': #LCV for game
+                deck = play1.dealAHand(deck)
+                deck = play2.dealAHand(deck)
+                play1.total = choice(play1.name,play1.hand,play1.total,deck)
+                play2.total = choice(play2.name,play2.hand,play2.total,deck)
+                print("\n")
+                winner(play1.total,play2.total,play1.name,play2.name)
+                
+                gameStatus = input("Play again? (type 'y' for yes or 'n' for no)") #turns on/off the game
+
+main()
