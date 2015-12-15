@@ -5,17 +5,60 @@ class Player:
         def __init__(self):
                 self.name = playName() #player's name, uses playerName function
                 self.total = 0 #Handvalue
+                self.hand = [] #Empty hand
+                deck1 = createDeck() #Creates a full deck
+                random.shuffle(deck1) #Shuffles the deck
+                self.deck = deck1 #Replaces old deck with shuffle deck
+                self.points = 0 #Initalize games won
+
+        def __str__(self):
+                return (self.name + ", you got: " + str(self.hand[-1])  + ". A total of " + str(self.total)) #Nicely displays card and total
+
+        #Gives player 2 cards
+        def dealAHand(self):
+                self.hit()
+                self.hit()
+                print (self.name + ", you have: " + str(self.hand[0]) + " and " + str(self.hand[1])  + ". A total of " + str(self.total))
 
         #Deals a hand for the player
-        def dealAHand(self,deck):
-                random.shuffle(deck)
-                #print(deck)
-                hand = [deck[-1], deck[-2]]
-                deck.pop()
-                deck.pop()
-                #print("hand: " + str(hand) + "  . " + str(deck))
-                self.hand = hand
-                return deck #The deck leftover
+        def hit(self):
+                self.hand.append(self.deck[-1])
+                self.deck.pop()
+                self.total += self.hand[-1].bjValue
+
+        #Ask to hit or nah. Uses checkValue
+        def choice(self):
+                keepPlay = True
+                while keepPlay == True:
+                        print("------------------------------------")
+                        play = 'o'
+                        if self.total == 21:
+                                print("Black Jack!")
+                                keepPlay = False
+                        else:
+                                while play != 'h' and play != 'n':
+                                        play = input(self.name + ", Hit or nah? (type 'h' for hit and 'n' for nah): ")
+                                        if play == "h":
+                                                self.hit()
+                                                print(self)
+                                                keepPlay = self.checkValue(keepPlay)
+                                        elif play == 'n':
+                                                keepPlay = self.checkValue(keepPlay)
+                                                keepPlay = False
+                                        else:
+                                                print("Please type 'h' for hit and 'n' for nah")
+
+        #Checks if value is over 21
+        def checkValue(self, keepPlay):
+                if self.total > 21:
+                        print("Bust!")
+                        keepPlay = False
+                        self.total = 0
+                elif self.total == 21:
+                        print("BlackJack!")
+                        keepPlay = False
+                return keepPlay
+        
 
 #Template for each card
 class Card:
@@ -46,72 +89,17 @@ def createDeck():
                 deck.append(Card(i))    
         return deck
 
-#Calculate blackJack total
-def blackJackValue(hand):
-        total = 0
-        for i in range(len(hand)):
-                        if total <= 10 and hand[i].bjValue == 0: #Determines if an ace is worth 11 or 1
-                                total += 11
-                        else:
-                                total += hand[i].bjValue
-        return total
-
-#Displays all of the cards from a hand
-def displayHand(hand, name):
-        total = blackJackValue(hand)
-        print(name + ", you have: " + ', ' + str(hand[0])+ str(hand[1]) + ". A total of " + str(total))
-        return total
-
-#Checks if the total is over 21
-def checkValue(total, keepPlay):
-        if total > 21:
-                print("Bust!")
-                keepPlay = False
-                total = 0
-        elif total == 21:
-                print("BlackJack!")
-                keepPlay = False
-        return keepPlay,total
-
-#Function when player decides to hit
-def hit(hand,total, deck):
-        hand.append(deck[-1])
-        deck.pop()
-        total = blackJackValue(hand)
-        print("It's a " + str(hand[-1]) + ". A total of " + str(total))
-        return total
-
-#Each player's turn
-def choice(name, hand, total,deck):
-        keepPlay = True
-        while keepPlay == True:
-                print("------------------------------------")
-                total = displayHand(hand,name)
-                play = 'o'
-                if total == 21:
-                        print("Black Jack!")
-                        keepPlay = False
-                else:
-                        while play != 'h' and play != 'n':
-                                play = input(name + ", Hit or nah? (type 'h' for hit and 'n' for nah): ")
-                                if play == "h":
-                                        total = hit(hand,total,deck)
-                                        keepPlay,total = checkValue(total,keepPlay)
-                                elif play == 'n':
-                                        keepPlay,total = checkValue(total,keepPlay)
-                                        keepPlay = False
-                                else:
-                                        print("Please type 'h' for hit and 'n' for nah")
-        return total
-
 #Determines a winner based on total
-def winner(total1,total2, name1, name2):
-        if total1 < total2:
-                print("Congrats, " + name2 + "! You won!")
-        elif total1 > total2:
-                print("Congrats, " + name1 + "! You won!")
-        elif total1 == total2:
+def winner(name1, name2):
+        if name1.total < name2.total:
+                print("Congrats, " + name2.name + "! You won!")
+                name2.points += 1
+        elif name1.total > name2.total:
+                print("Congrats, " + name1.name + "! You won!")
+                name1.points += 1                
+        elif name1.total == name2.total:
                 print("It's a tie!")
+        print("Score: " + name1.name + ": " + str(name1.points) + "  "  + name2.name + ": " + str(name2.points))
 
         
 def main():
@@ -120,16 +108,14 @@ def main():
         play1 = Player() #Creates players
         play2 = Player()
         print("\n")
-        deck = createDeck() #Creates a full deck
-
         while gameStatus == 'y': #LCV for game
-                deck = play1.dealAHand(deck)
-                deck = play2.dealAHand(deck)
-                play1.total = choice(play1.name,play1.hand,play1.total,deck)
-                play2.total = choice(play2.name,play2.hand,play2.total,deck)
+                play1.dealAHand() #deal two cards
+                play1.choice() #hits or nah
                 print("\n")
-                winner(play1.total,play2.total,play1.name,play2.name)
-                
+                play2.dealAHand() #deal two cards               
+                play2.choice() #hit or nah
+                print("\n")
+                winner(play1,play2) #determines winner
                 gameStatus = input("Play again? (type 'y' for yes or 'n' for no)") #turns on/off the game
 
-main()
+
