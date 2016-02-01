@@ -16,6 +16,8 @@ class Player:
 
         #Gives player 2 cards
         def dealAHand(self):
+                self.total = 0
+                self.hand =[]
                 self.hit()
                 self.hit()
                 print (self.name + ", you have: " + str(self.hand[0]) + " and " + str(self.hand[1])  + ". A total of " + str(self.total))
@@ -24,7 +26,14 @@ class Player:
         def hit(self):
                 self.hand.append(self.deck[-1])
                 self.deck.pop()
-                self.total += self.hand[-1].bjValue
+                if self.hand[-1].bjValue == 1:
+                        if self.total <= 10:
+                                self.total += 11
+                        else:
+                                self.total += self.hand[-1].bjValue
+                else:
+                        self.total += self.hand[-1].bjValue
+
 
         #Ask to hit or nah. Uses checkValue
         def choice(self):
@@ -71,7 +80,7 @@ class Card:
                 #print("hand: " + str(card))
                 suits = ["♤","♢","♡","♧"]
                 cardValues = ["Ace","2","3","4","5","6","7","8","9","10","J","Q","K"]
-                return str(cardValues[self.cardCode//4 - 1] + " of " + suits[self.cardCode%4]) #Prints out the card
+                return str(cardValues[self.cardCode//4 - 1] + " of " + suits[self.cardCode%4] + "bjValue: " +str( self.bjValue)) #Prints out the card
 
 #Introduction to game with tutorial
 def intro():
